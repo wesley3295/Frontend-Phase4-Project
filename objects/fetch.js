@@ -25,8 +25,8 @@ constructor(url){
         let p =new Project([pro.title,pro.video_link,pro.project_link,pro.cohort,pro.blog_link],apiUser.id,pro.id)
         p.save()
         u.save()
-        u.project = p
-        
+        u.projects = []
+        u.projects.push(p)
       }
         }
             
@@ -68,7 +68,8 @@ constructor(url){
   }).then((object)=>{
     newProject.id = object.id
     newProject.user_id = newUser.id
-    newUser.project = newProject
+    newUser.projects = []
+    newUser.projects.push(newProject)
     document.getElementById(`project_form`).innerHTML = ""
     render()
 }).catch(function(error){

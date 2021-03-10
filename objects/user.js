@@ -15,4 +15,9 @@ class User{
     save(){
         User.all.push(this)
     }
+
+    //find or create by
+    findOrCreateBy(user){
+        
+    }
 }
