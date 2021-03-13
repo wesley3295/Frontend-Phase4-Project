@@ -141,11 +141,9 @@ class Fetch {
       .then((response) => {
         return response.json();
       }).then((object) => {
-        
+
       }).catch(function (error) {
         alert(error.message)
       })
   }
-
-
 }

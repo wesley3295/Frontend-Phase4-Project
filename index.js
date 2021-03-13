@@ -4,36 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
     render()
 })
 
-// globals
-//form elements
-const navbar = document.getElementById("nav")
-const userDiv = document.getElementById("user_form")
-const formDiv = document.getElementById("project_form")
-const usersDiv = document.getElementById("users_projects")
-let userDisDiv;
-let projectDiv;
-let createUser = [] //current user attributes
-let newUser; // current user
-let createProject = [] // current project attributes
-let newProject; // current project
-//fetch urls
-const userUrl = 'http://localhost:3000/users'
-const projectUrl = 'http://localhost:3000/projects'
-let firstNameInput;
-let lastNameInput;
-let emailInput;
-let githubInput;
-let linkdnInput;
-let facebookInput;
-let twitterInput;
-let redditInput;
-let youtubeInput;
-let projectHeader;
-let titleInput;
-let videoLinkInput;
-let projectLinkInput;
-let cohortInput;
-let blogLinkInput;
 
 //clear Dom
 const clearDom = () => {
@@ -133,6 +103,7 @@ const renderUserForm = (user = undefined) => {
     if (user.id) {
         signUpHeader.innerHTML = "Edit User"
         submit.hidden = true
+        
         firstNameInput.value = user.first_name
         lastNameInput.value = user.last_name
         emailInput.value = user.email
@@ -143,11 +114,6 @@ const renderUserForm = (user = undefined) => {
         redditInput.value = user.reddit
         youtubeInput.value = user.youtube
         userDiv.removeChild(userChildDiv)
-        // for(const c of usersDiv.children){
-        //     if(c.id === `user-${user.id}`){
-        //         c.children[8].appendChild(userChildDiv)
-        //     }
-        // }
     }
     submit.addEventListener("click", (e) => {
         e.preventDefault()
@@ -203,6 +169,7 @@ const renderProjectForm = (project = undefined) => {
     if (project) {
         projectHeader.innerHTML = "Edit Project"
         submit.hidden = true
+        
         titleInput.value = project.title
         projectLinkInput.value = project.project_link
         videoLinkInput.value = project.video_link
@@ -248,12 +215,9 @@ const render = () => {
 
     User.all.forEach(user => {
         userDisDiv = document.createElement('div')
-        //
         userDisDiv.id = `user-${user.id}`
-        //
-        //
+        //    
         let nameH3 = document.createElement('h3')
-
         //
         let emailP = document.createElement('p')
         //
@@ -263,7 +227,6 @@ const render = () => {
         let redditA = document.createElement('a')
         let youtubeA = document.createElement('a')
         let linkdnA = document.createElement('a')
-        //
         //
         let githubIcon = document.createElement('img')
         let facebookIcon = document.createElement('img')
@@ -314,12 +277,11 @@ const render = () => {
         userDisDiv.appendChild(youtubeA)
         userDisDiv.appendChild(linkdnA)
         //
-        //
-        //
         user.projects.forEach(p => {
             //  
             projectDiv = document.createElement('div')
             projectDiv.id = `project-${p.id}`
+            
             let titleH2 = document.createElement('h2')
             let projectP = document.createElement('p')
             let blogP = document.createElement('p')
@@ -329,21 +291,26 @@ const render = () => {
             let split = p.video_link.split("watch?v=");
             split.splice(1, 0, 'embed/');
             let embed = split.join("");
+            
             titleH2.textContent = p.title
+           
             projectA.textContent = "here"
             projectP.textContent = (`Check out ${user.first_name}'s project ${projectA}`)
             blogA.textContent = "here"
             blogP.textContent = (`Check out ${user.first_name}'s blog ${blogA}`)
             projectA.target = "_blank"
             blogA.target = "_blank"
+            
             videoIframe.src = embed
             videoIframe.width = "280"
             videoIframe.height = "157.5"
             videoIframe.frameborder = "0"
             videoIframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             videoIframe.setAttribute('allowFullScreen', '')
+            
             projectA.href = p.project_link
             blogA.href = p.blog_link
+            
             userDisDiv.appendChild(projectDiv)
             projectP.appendChild(projectA)
             blogP.appendChild(blogA)
@@ -351,6 +318,7 @@ const render = () => {
             projectDiv.appendChild(videoIframe)
             projectDiv.appendChild(projectP)
             projectDiv.appendChild(blogP)
+            
             const editBtn = document.createElement('button')
             editBtn.id = `editBtn`
             editBtn.textContent = `Edit`
@@ -383,8 +351,10 @@ const render = () => {
                     let oldProjects = User.all[oldUserIndex].projects
                     User.all[oldUserIndex] = new User(createUser, oldUser.id)
                     User.all[oldUserIndex].projects = oldProjects
+                    
                     const findOldProject = User.all[oldUserIndex].projects.find((x) => x.id === p.id)
                     const oldProjectIndex = User.all[oldUserIndex].projects.indexOf(findOldProject)
+                    
                     w = new Project(createProject, User.all[oldUserIndex].projects[oldProjectIndex].user_id, User.all[oldUserIndex].projects[oldProjectIndex].id)
                     let oldProject = User.all[oldUserIndex].projects[oldProjectIndex] = w
                     Project.all[y] = w
