@@ -1,8 +1,4 @@
 //move forms to classes
-document.addEventListener("DOMContentLoaded", () => {
-    nav()
-    render()
-})
 
 
 //clear Dom
@@ -10,22 +6,54 @@ const clearDom = () => {
     navbar.innerHTML = ""
     userDiv.innerHTML = ""
     formDiv.innerHTML = ""
+    loginDiv().innerHTML = ""
     nav()
 }
+
+
+const login = () => {
+    let loginInput = document.createElement('input')
+    const submitBtn = document.createElement('button')
+    submitBtn.innerHTML = "Login"
+    loginInput.placeholder = "Email"
+    loginDiv().append(loginInput, submitBtn)
+
+    submitBtn.addEventListener('click', (e) => {
+        const loginUser = User.all.find(user => user.email === loginInput.value)
+        if (loginUser) {
+            newUser = loginUser
+            usersDiv.innerHTML = ""
+            clearDom()
+        } else {
+            User.renderUserForm()
+        }
+    })
+}
+
 //nav buttons
 const nav = () => {
     if (newUser === undefined) {
+        login()
         const createUserBtn = document.createElement("button")
         createUserBtn.innerHTML = "Create User"
-        createUserBtn.addEventListener("click", renderUserForm)
+        createUserBtn.addEventListener("click", User.renderUserForm)
         navbar.appendChild(createUserBtn)
     }
     if (newUser) {
         const createProjectBtn = document.createElement("button")
         createProjectBtn.innerHTML = "Create Another Project"
 
-        createProjectBtn.addEventListener("click", () => renderProjectForm())
+        createProjectBtn.addEventListener("click", () => Project.renderProjectForm())
         navbar.appendChild(createProjectBtn)
+
+        const logoutBtn = document.createElement('button')
+        logoutBtn.innerHTML = "Logout"
+        loginDiv().append(logoutBtn)
+        logoutBtn.addEventListener('click', (e) => {
+            newUser = undefined
+            usersDiv.innerHTML = ""
+            clearDom()
+        })
     }
     const viewProjectsBtn = document.createElement("button")
     viewProjectsBtn.innerHTML = "View Projects"
@@ -33,187 +61,13 @@ const nav = () => {
     navbar.appendChild(viewProjectsBtn)
 }
 
-const renderUserForm = (user = undefined) => {
-
-    if (user.id) {
-        clearDom()
-    } else {
-        clearDom()
-        usersDiv.innerHTML = ""
-    }
-    const br = document.createElement("br")
-
-    const signUpHeader = document.createElement("h3")
-    signUpHeader.innerHTML = `User Sign up`
-
-    userChildDiv = document.createElement("div")
-    firstNameInput = document.createElement("input")
-    lastNameInput = document.createElement("input")
-    emailInput = document.createElement("input")
-    githubInput = document.createElement("input")
-    linkdnInput = document.createElement("input")
-    facebookInput = document.createElement("input")
-    twitterInput = document.createElement("input")
-    redditInput = document.createElement("input")
-    youtubeInput = document.createElement("input")
-    const submit = document.createElement("button")
-    submit.innerHTML = "Sign up"
-
-    firstNameInput.id = "first_name"
-    lastNameInput.id = "last_name"
-    emailInput.id = "email"
-    githubInput.id = "github"
-    linkdnInput.id = "linkdn"
-    facebookInput.id = "facebook"
-    twitterInput.id = "twitter"
-    redditInput.id = "reddit"
-    youtubeInput.id = "youtube"
-
-    githubInput.type = "url"
-    linkdnInput.type = "url"
-    facebookInput.type = "url"
-    twitterInput.type = "url"
-    redditInput.type = "url"
-    youtubeInput.type = "url"
-
-    firstNameInput.placeholder = `First Name`
-    lastNameInput.placeholder = "Last Name"
-    emailInput.placeholder = "Email"
-    githubInput.placeholder = "Github"
-    linkdnInput.placeholder = "Linkdn"
-    facebookInput.placeholder = "Facebook"
-    twitterInput.placeholder = "Twitter"
-    redditInput.placeholder = "Reddit"
-    youtubeInput.placeholder = "YouTube"
-
-
-    userDiv.appendChild(userChildDiv)
-    userChildDiv.appendChild(signUpHeader)
-    userChildDiv.appendChild(firstNameInput)
-    userChildDiv.appendChild(lastNameInput)
-    userChildDiv.appendChild(emailInput)
-    userChildDiv.appendChild(githubInput)
-    userChildDiv.appendChild(linkdnInput)
-    userChildDiv.appendChild(facebookInput)
-    userChildDiv.appendChild(twitterInput)
-    userChildDiv.appendChild(redditInput)
-    userChildDiv.appendChild(youtubeInput)
-    userChildDiv.appendChild(submit)
-
-    if (user.id) {
-        signUpHeader.innerHTML = "Edit User"
-        submit.hidden = true
-        
-        firstNameInput.value = user.first_name
-        lastNameInput.value = user.last_name
-        emailInput.value = user.email
-        githubInput.value = user.github
-        linkdnInput.value = user.linkdn
-        facebookInput.value = user.facebook
-        twitterInput.value = user.twitter
-        redditInput.value = user.reddit
-        youtubeInput.value = user.youtube
-        userDiv.removeChild(userChildDiv)
-    }
-    submit.addEventListener("click", (e) => {
-        e.preventDefault()
-
-        if (!user.id) {
-            createUser.push(firstNameInput.value, lastNameInput.value, emailInput.value, githubInput.value, linkdnInput.value, facebookInput.value, twitterInput.value, redditInput.value, youtubeInput.value)
-            let userFetch = new Fetch(userUrl)
-            newUser = new User(createUser)
-            userFetch.createUser(newUser)
-        }
-    })
-
-}
-
-const renderProjectForm = (project = undefined) => {
-
-    if (project === undefined) {
-        clearDom()
-        usersDiv.innerHTML = ""
-    }
-    projectChildDiv = document.createElement('div')
-    projectHeader = document.createElement("h3")
-    titleInput = document.createElement("input")
-    videoLinkInput = document.createElement("input")
-    projectLinkInput = document.createElement("input")
-    cohortInput = document.createElement("input")
-    blogLinkInput = document.createElement("input")
-    const submit = document.createElement("button")
-
-    projectHeader.innerHTML = "Project"
-    submit.innerHTML = "Post Project"
-
-    titleInput.placeholder = "Title"
-    projectLinkInput.placeholder = "Project Link"
-    videoLinkInput.placeholder = "Video Link"
-    cohortInput.placeholder = "Cohort"
-    blogLinkInput.placeholder = "Blog Link"
-
-    projectLinkInput.type = "url"
-    videoLinkInput.type = "url"
-    blogLinkInput.type = "url"
-
-
-    formDiv.appendChild(projectChildDiv)
-    projectChildDiv.appendChild(projectHeader)
-    projectChildDiv.appendChild(titleInput)
-    projectChildDiv.appendChild(projectLinkInput)
-    projectChildDiv.appendChild(videoLinkInput)
-    projectChildDiv.appendChild(cohortInput)
-    projectChildDiv.appendChild(blogLinkInput)
-    projectChildDiv.appendChild(submit)
-
-    if (project) {
-        projectHeader.innerHTML = "Edit Project"
-        submit.hidden = true
-        
-        titleInput.value = project.title
-        projectLinkInput.value = project.project_link
-        videoLinkInput.value = project.video_link
-        cohortInput.value = project.cohort
-        blogLinkInput.value = project.blog_link
-        // 
-        formDiv.removeChild(projectChildDiv)
-        for (const c of usersDiv.children) {
-            for (const x of c.children) {
-                if (x.id === `project-${project.id}`) {
-                    document.getElementById(`project-${project.id}`).appendChild(userChildDiv)
-                    document.getElementById(`project-${project.id}`).appendChild(projectChildDiv)
-                }
-            }
-        }
-    }
-
-    submit.addEventListener("click", (e) => {
-        e.preventDefault()
-
-        if (project === undefined) {
-            createProject = []
-            createProject.push(titleInput.value, projectLinkInput.value, videoLinkInput.value, cohortInput.value, blogLinkInput.value)
-            
-            let projectFetch = new Fetch(projectUrl)
-            let user_id = newUser.id
-            
-            newProject = new Project(createProject, user_id)
-            newProject.save()
-            
-            projectFetch.createProject(newProject)
-        }
-
-    })
-}
-
 //rename function
 const render = () => {
     clearDom()
     usersDiv.innerHTML = ""
-    const fetchData = new Fetch(userUrl)
-    fetchData.fetchUsers()
-
+    
     User.all.forEach(user => {
+
         userDisDiv = document.createElement('div')
         userDisDiv.id = `user-${user.id}`
         //    
@@ -281,7 +135,7 @@ const render = () => {
             //  
             projectDiv = document.createElement('div')
             projectDiv.id = `project-${p.id}`
-            
+
             let titleH2 = document.createElement('h2')
             let projectP = document.createElement('p')
             let blogP = document.createElement('p')
@@ -291,26 +145,26 @@ const render = () => {
             let split = p.video_link.split("watch?v=");
             split.splice(1, 0, 'embed/');
             let embed = split.join("");
-            
+
             titleH2.textContent = p.title
-           
+
             projectA.textContent = "here"
             projectP.textContent = (`Check out ${user.first_name}'s project ${projectA}`)
             blogA.textContent = "here"
             blogP.textContent = (`Check out ${user.first_name}'s blog ${blogA}`)
             projectA.target = "_blank"
             blogA.target = "_blank"
-            
+
             videoIframe.src = embed
             videoIframe.width = "280"
             videoIframe.height = "157.5"
             videoIframe.frameborder = "0"
             videoIframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             videoIframe.setAttribute('allowFullScreen', '')
-            
+
             projectA.href = p.project_link
             blogA.href = p.blog_link
-            
+
             userDisDiv.appendChild(projectDiv)
             projectP.appendChild(projectA)
             blogP.appendChild(blogA)
@@ -318,57 +172,44 @@ const render = () => {
             projectDiv.appendChild(videoIframe)
             projectDiv.appendChild(projectP)
             projectDiv.appendChild(blogP)
-            
-            const editBtn = document.createElement('button')
-            editBtn.id = `editBtn`
-            editBtn.textContent = `Edit`
-            projectDiv.appendChild(editBtn)
 
-            editBtn.addEventListener('click', (e) => {
-                e.preventDefault
-                if (e.target.textContent === "Edit") {
-                    e.target.textContent = "Save"
-                    clearDom()
-                    renderUserForm(user)
-                    renderProjectForm(p)
+            if (p.user_id === newUser.id) {
+                const editBtn = document.createElement('button')
 
+                editBtn.id = `editBtn`
+                editBtn.textContent = `Edit`
+                projectDiv.appendChild(editBtn)
 
-                } else if (e.target.textContent === "Save") {
-                    e.target.textContent = "Edit"
-                    createUser = []
-                    createProject = []
-
-                    const x = Project.all.find(x => x === p);
-                    const y = Project.all.indexOf(x)
-                    let z = Project.all[y]
-                    const findOldUser = User.all.find(u => u === user);
-                    const oldUserIndex = User.all.indexOf(findOldUser)
-                    let oldUser = User.all[oldUserIndex]
-
-                    createProject.push(titleInput.value, videoLinkInput.value, projectLinkInput.value, cohortInput.value, blogLinkInput.value)
-                    createUser.push(firstNameInput.value, lastNameInput.value, emailInput.value, githubInput.value, linkdnInput.value, facebookInput.value, twitterInput.value, redditInput.value, youtubeInput.value)
-
-                    let oldProjects = User.all[oldUserIndex].projects
-                    User.all[oldUserIndex] = new User(createUser, oldUser.id)
-                    User.all[oldUserIndex].projects = oldProjects
-                    
-                    const findOldProject = User.all[oldUserIndex].projects.find((x) => x.id === p.id)
-                    const oldProjectIndex = User.all[oldUserIndex].projects.indexOf(findOldProject)
-                    
-                    w = new Project(createProject, User.all[oldUserIndex].projects[oldProjectIndex].user_id, User.all[oldUserIndex].projects[oldProjectIndex].id)
-                    let oldProject = User.all[oldUserIndex].projects[oldProjectIndex] = w
-                    Project.all[y] = w
-
-                    new Fetch(userUrl).editUserProject(oldUser, oldProject)
-                    usersDiv.innerHTML = ""
-
-                    render()
+                editBtn.addEventListener('click', (e) => {
+                    e.preventDefault
+                    if (e.target.textContent === "Edit") {
+                        e.target.textContent = "Save"
+                        clearDom()
+                        User.renderUserForm(user)
+                        Project.renderProjectForm(p)
 
 
-                }
-            })
+                    } else if (e.target.textContent === "Save") {
+                        e.target.textContent = "Edit"
+                        createUser = []
+                        createProject = []
+                        createProject.push(titleInput.value, videoLinkInput.value, projectLinkInput.value, cohortInput.value, blogLinkInput.value, p.id, newUser.id)
+                        createUser.push(newUser.id, firstNameInput.value, lastNameInput.value, emailInput.value, githubInput.value, linkdnInput.value, facebookInput.value, twitterInput.value, redditInput.value, youtubeInput.value)
+                        updatedUser = new User(createUser)
+                        updatedUserProject = new Project(createProject)
+                        Fetch.editUserProject(updatedUser, updatedUserProject)
+
+                    }
+                })
+            }
         })
     })
 }
 
 
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    Fetch.fetchUsers()
+    render()
+})

@@ -2,6 +2,7 @@ const navbar = document.getElementById("nav")
 const userDiv = document.getElementById("user_form")
 const formDiv = document.getElementById("project_form")
 const usersDiv = document.getElementById("users_projects")
+const loginDiv = () => document.getElementById('login')
 
 let userDisDiv;
 let projectDiv;
@@ -11,10 +12,8 @@ let newUser; // current user
 let createProject = [] // current project attributes
 let newProject; // current project
 
-//fetch urls
-const userUrl = 'http://localhost:3000/users'
-const projectUrl = 'http://localhost:3000/projects'
-
+let userChildDiv;
+let projectChildDiv;
 let firstNameInput;
 let lastNameInput;
 let emailInput;
