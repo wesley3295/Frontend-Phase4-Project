@@ -65,8 +65,8 @@ const nav = () => {
 const render = () => {
     clearDom()
     usersDiv.innerHTML = ""
-    
     User.all.forEach(user => {
+        
 
         userDisDiv = document.createElement('div')
         userDisDiv.id = `user-${user.id}`
@@ -132,7 +132,6 @@ const render = () => {
         userDisDiv.appendChild(linkdnA)
         //
         user.projects.forEach(p => {
-            //  
             projectDiv = document.createElement('div')
             projectDiv.id = `project-${p.id}`
 
@@ -173,7 +172,7 @@ const render = () => {
             projectDiv.appendChild(projectP)
             projectDiv.appendChild(blogP)
 
-            if (p.user_id === newUser.id) {
+            if (user === newUser && newUser!=undefined) {
                 const editBtn = document.createElement('button')
 
                 editBtn.id = `editBtn`
@@ -191,13 +190,10 @@ const render = () => {
 
                     } else if (e.target.textContent === "Save") {
                         e.target.textContent = "Edit"
-                        createUser = []
-                        createProject = []
-                        createProject.push(titleInput.value, videoLinkInput.value, projectLinkInput.value, cohortInput.value, blogLinkInput.value, p.id, newUser.id)
-                        createUser.push(newUser.id, firstNameInput.value, lastNameInput.value, emailInput.value, githubInput.value, linkdnInput.value, facebookInput.value, twitterInput.value, redditInput.value, youtubeInput.value)
-                        updatedUser = new User(createUser)
-                        updatedUserProject = new Project(createProject)
-                        Fetch.editUserProject(updatedUser, updatedUserProject)
+                        const projectObject = { id: p.id,title: titleInput.value, video_link: videoLinkInput.value, project_link: projectLinkInput.value, cohort: cohortInput.value, blog_link: blogLinkInput.value, user_id: newUser.id }
+                        const userObject = { id: newUser.id, first_name: firstNameInput.value, last_name: lastNameInput.value, email: emailInput.value, github: githubInput.value, linkdn: linkdnInput.value, facebook: facebookInput.value, twitter: twitterInput.value, reddit: redditInput.value, youtube: youtubeInput.value }
+                           
+                        Fetch.editUserProject(userObject, projectObject)
 
                     }
                 })

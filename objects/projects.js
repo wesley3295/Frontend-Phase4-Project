@@ -1,7 +1,7 @@
 class Project {
     static all = []
 
-    constructor([title, video_link, project_link, cohort, blog_link, id, user_id]) {
+    constructor([id,title, video_link, project_link, cohort, blog_link,user_id]) {
         this.title = title;
         this.video_link = video_link;
         this.project_link = project_link;
@@ -78,10 +78,8 @@ class Project {
             e.preventDefault()
 
             if (project === undefined) {
-                createProject = []
-                createProject.push(titleInput.value, videoLinkInput.value, projectLinkInput.value, cohortInput.value, blogLinkInput.value, undefined, newUser.id)
-                newProject = new Project(createProject)
-                Fetch.createProject(newProject)
+                const projectObject = { id: undefined,title: titleInput.value, video_link: videoLinkInput.value, project_link: projectLinkInput.value, cohort: cohortInput.value, blog_link: blogLinkInput.value, user_id: newUser.id }
+                Fetch.createProject(projectObject)
             }
 
         })

@@ -96,10 +96,8 @@ class User {
             e.preventDefault()
 
             if (!user.id) {
-                createUser = []
-                createUser.push(undefined, firstNameInput.value, lastNameInput.value, emailInput.value, githubInput.value, linkdnInput.value, facebookInput.value, twitterInput.value, redditInput.value, youtubeInput.value)
-                newUser = new User(createUser)
-                Fetch.createUser(newUser)
+              const userObject = { id: undefined, first_name: firstNameInput.value, last_name: lastNameInput.value, email: emailInput.value, github: githubInput.value, linkdn: linkdnInput.value, facebook: facebookInput.value, twitter: twitterInput.value, reddit: redditInput.value, youtube: youtubeInput.value }
+                Fetch.createUser(userObject)
             }
         })
 

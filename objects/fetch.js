@@ -10,6 +10,7 @@ class Fetch {
     fetch(Fetch.userUrl)
       .then(resp => resp.json())
       .then(function (json) {
+        debugger
         json.data.forEach(user => {
           if (!(User.all.find(u => u.id === user.attributes.id))) {
             const apiUser = Object.values(user.attributes)
@@ -46,14 +47,19 @@ class Fetch {
       .then((response) => {
         return response.json();
       }).then((object) => {
-        newUser.id = object.id
+        debugger
+        const userValues = Object.values(object)
+        newUser = new User(userValues)
         newUser.save()
         clearDom()
         Project.renderProjectForm()
+      }).catch(function (error) {
+        alert(error.message)
       })
   }
   //creates project in api
   static createProject(project) {
+    
     fetch(Fetch.projectUrl, {
       method: "POST",
       headers: {
@@ -65,7 +71,9 @@ class Fetch {
       .then((response) => {
         return response.json();
       }).then((object) => {
-        newProject.id = object.id
+        
+        const projectValues = Object.values(object)
+        newProject = new Project(projectValues)
         newProject.save()
         newUser.projects.push(newProject)
         clearDom()
@@ -123,6 +131,7 @@ class Fetch {
           User.all[userAllIndex].projects.push(Project.all[projectAllIndex])
         }
         newUser = User.all[userAllIndex]
+        usersDiv.innerHTML=""
         clearDom()
         render()
       }).catch(function (error) {
