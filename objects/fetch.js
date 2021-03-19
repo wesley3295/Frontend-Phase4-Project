@@ -10,21 +10,18 @@ class Fetch {
     fetch(Fetch.userUrl)
       .then(resp => resp.json())
       .then(function (json) {
-        debugger
         json.data.forEach(user => {
           if (!(User.all.find(u => u.id === user.attributes.id))) {
             const apiUser = Object.values(user.attributes)
             new User(apiUser).save()
           }
         })
-
         json.included.forEach(project => {
           if (!(Project.all.find(p => p.id === project.attributes.id))) {
             const apiProject = Object.values(project.attributes)
             new Project(apiProject).save()
           }
         })
-
         User.all.forEach(user => {
           let projectsArray = Project.all.filter(p => p.user_id === user.id)
           projectsArray.forEach(pro => {
@@ -34,6 +31,7 @@ class Fetch {
 
       })
   }
+
   // creates user in api
   static createUser(user) {
     fetch(Fetch.userUrl, {
@@ -47,7 +45,6 @@ class Fetch {
       .then((response) => {
         return response.json();
       }).then((object) => {
-        debugger
         const userValues = Object.values(object)
         newUser = new User(userValues)
         newUser.save()
@@ -57,6 +54,7 @@ class Fetch {
         alert(error.message)
       })
   }
+  
   //creates project in api
   static createProject(project) {
     

@@ -29,3 +29,13 @@ let videoLinkInput;
 let projectLinkInput;
 let cohortInput;
 let blogLinkInput;
+
+
+searchInput = document.createElement("input")
+searchInput.type = "text"
+searchInput.addEventListener("input", (e) => {
+    let searchArry = User.all.filter(u => u.first_name.includes(e.target.value) || u.last_name.includes(e.target.value))
+    clearDom()
+    usersDiv.innerHTML = ""
+    renderUsersAndProjects(searchArry)
+})

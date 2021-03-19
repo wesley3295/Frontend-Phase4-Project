@@ -61,13 +61,28 @@ const nav = () => {
     navbar.appendChild(viewProjectsBtn)
 }
 
+searchInput = document.createElement("input")
+searchInput.type = "text"
+searchInput.addEventListener("input", (e) => {
+    let searchArry = User.all.filter(u => u.first_name.includes(e.target.value) || u.last_name.includes(e.target.value))
+    clearDom()
+    usersDiv.innerHTML = ""
+    renderUsersAndProjects(searchArry)
+})
+
 //rename function
 const render = () => {
     clearDom()
     usersDiv.innerHTML = ""
-    User.all.forEach(user => {
-        
+    document.body.appendChild(searchInput)
+    renderUsersAndProjects(User.all)
+}
 
+
+const renderUsersAndProjects = (array) => {
+    array.forEach(user => {
+        
+        
         userDisDiv = document.createElement('div')
         userDisDiv.id = `user-${user.id}`
         //    
@@ -134,7 +149,7 @@ const render = () => {
         user.projects.forEach(p => {
             projectDiv = document.createElement('div')
             projectDiv.id = `project-${p.id}`
-
+            
             let titleH2 = document.createElement('h2')
             let projectP = document.createElement('p')
             let blogP = document.createElement('p')
@@ -144,26 +159,26 @@ const render = () => {
             let split = p.video_link.split("watch?v=");
             split.splice(1, 0, 'embed/');
             let embed = split.join("");
-
+            
             titleH2.textContent = p.title
-
+            
             projectA.textContent = "here"
             projectP.textContent = (`Check out ${user.first_name}'s project ${projectA}`)
             blogA.textContent = "here"
             blogP.textContent = (`Check out ${user.first_name}'s blog ${blogA}`)
             projectA.target = "_blank"
             blogA.target = "_blank"
-
+            
             videoIframe.src = embed
             videoIframe.width = "280"
             videoIframe.height = "157.5"
             videoIframe.frameborder = "0"
             videoIframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             videoIframe.setAttribute('allowFullScreen', '')
-
+            
             projectA.href = p.project_link
             blogA.href = p.blog_link
-
+            
             userDisDiv.appendChild(projectDiv)
             projectP.appendChild(projectA)
             blogP.appendChild(blogA)
@@ -171,14 +186,14 @@ const render = () => {
             projectDiv.appendChild(videoIframe)
             projectDiv.appendChild(projectP)
             projectDiv.appendChild(blogP)
-
-            if (user === newUser && newUser!=undefined) {
+            
+            if (user === newUser && newUser != undefined) {
                 const editBtn = document.createElement('button')
-
+                
                 editBtn.id = `editBtn`
                 editBtn.textContent = `Edit`
                 projectDiv.appendChild(editBtn)
-
+                
                 editBtn.addEventListener('click', (e) => {
                     e.preventDefault
                     if (e.target.textContent === "Edit") {
@@ -186,24 +201,21 @@ const render = () => {
                         clearDom()
                         User.renderUserForm(user)
                         Project.renderProjectForm(p)
-
-
+                        
+                        
                     } else if (e.target.textContent === "Save") {
                         e.target.textContent = "Edit"
-                        const projectObject = { id: p.id,title: titleInput.value, video_link: videoLinkInput.value, project_link: projectLinkInput.value, cohort: cohortInput.value, blog_link: blogLinkInput.value, user_id: newUser.id }
+                        const projectObject = { id: p.id, title: titleInput.value, video_link: videoLinkInput.value, project_link: projectLinkInput.value, cohort: cohortInput.value, blog_link: blogLinkInput.value, user_id: newUser.id }
                         const userObject = { id: newUser.id, first_name: firstNameInput.value, last_name: lastNameInput.value, email: emailInput.value, github: githubInput.value, linkdn: linkdnInput.value, facebook: facebookInput.value, twitter: twitterInput.value, reddit: redditInput.value, youtube: youtubeInput.value }
-                           
+                        
                         Fetch.editUserProject(userObject, projectObject)
-
+                        
                     }
                 })
             }
         })
     })
 }
-
-
-
 document.addEventListener("DOMContentLoaded", () => {
 
     Fetch.fetchUsers()
